@@ -4,6 +4,7 @@
 using namespace std;
 
 LPCTSTR portError = "Niewlasciwa nazwa portu lub port jest juz aktywny";
+unsigned long blockSize = 10000;
 unsigned char txtArray[9999999];
 unsigned int indexx = 0;
 
@@ -28,27 +29,33 @@ unsigned char *cuttingMainArray(unsigned long blockSize, unsigned long *lastInde
     return tempArray;
 }
 
-void openPort(HANDLE &hCommDev, LPCTSTR portName, DCB dcb)
+bool openPort(HANDLE &hCommDev, LPCTSTR portName, DCB dcb)
 {
     hCommDev = CreateFile(portName, GENERIC_READ | GENERIC_WRITE, 0, NULL,OPEN_EXISTING, 0, NULL);
+
     if(hCommDev != INVALID_HANDLE_VALUE)
     {
         dcb.DCBlength = sizeof(dcb);
         if(GetCommState(hCommDev, &dcb) == 0)
         {
             cout << "GetCommState Error." << "\n";
+            return false;
             CloseHandle(hCommDev);
         }
-        /*
-        cout << "Obecne ustawienia portu to: " << "\n";
+        
+        cout << "\nObecne ustawienia portu to: " << "\n";
         cout << "Predkosc transmisji: " << dcb.BaudRate << "\n";
         cout << "Sprawdzanie parzystosci: " << dcb.fParity << "\n";
         cout << "Ustawienie parzystosci: " << int(dcb.Parity) << "\n";
         cout << "Bity stopu: " << int(dcb.StopBits) << "\n";
-        cout << "Bity danych: " << int(dcb.ByteSize) << "\n";
         cout << "Kontrola linii DTR: " << dcb.fDtrControl << "\n";
-        */
+       
+       return true;
     }
+    cout << "Blad uchwytu \n";
+    CloseHandle(hCommDev);
+    return false;
+
 }
 
 bool setCommParametres(HANDLE hCommDev, COMMTIMEOUTS commTimeouts, unsigned long ReadIntervalTimeout, unsigned long ReadTotalTimeoutMultiplier, unsigned long ReadTotalTimeoutConstant, unsigned long WriteTotalTimeoutMultiplier, unsigned long WriteTotalTimeoutConstant)
@@ -92,31 +99,35 @@ void readSerialPort(HANDLE hCommDev, unsigned long blockSize)
  }
 
  
-void readFileTxt(string name)
+bool readFileTxt(string name)
 {
     char character;
     ifstream inputFile(name);
 
     if (!inputFile.is_open()) 
     {
-        cerr << "File open error. " << name << endl;
-        return;
+        cerr << "File open error. " << "Bledna sciezka" << endl;
+        inputFile.close();
+        return false;
     }
 
     while (inputFile.get(character)) 
     {
         txtArray[indexx++] = character;
     }
+
+    inputFile.close();
+    return true;
 }
 
 void sendFileTxt(HANDLE &hCommDev)
 {
-    unsigned long blockSize = 5555;
     unsigned long remainingBytes = indexx % blockSize;
     unsigned long howManyTimes = indexx / blockSize;
     unsigned long iterator = 1;
     unsigned long lastIndex = 0;
 
+    cout << "\nWielkosc bloku wynosi: " << blockSize << "\n";
     cout << "Ile razy dlugosc calego pliku jest wieksza od ustawionego bloku: " << howManyTimes << "\n";
     cout << "Dlugosc wczytanych danych: " << indexx << "\n";
     cout << "Pozostale Bajty: " << remainingBytes << "\n\n";
@@ -143,21 +154,42 @@ void sendFileTxt(HANDLE &hCommDev)
 
 }
 
+
 int main()
 {
     HANDLE hCommDev;
     DCB dcb;
     COMMTIMEOUTS commTimeouts;
     LPCTSTR portName = "COM3";
-    
-    readFileTxt("image.txt");
-    openPort(hCommDev, portName, dcb);
-    setCommParametres(hCommDev, commTimeouts, 0, 1000, 0, 0, 0);   
-    //cout << txtArray;
-    sendFileTxt(hCommDev);
-    //CloseHandle(hCommDev);
+    string path = "";
+    unsigned int bSize = 1;
 
-    cout << "\n" << "Przesylanie pliku zakonczylo sie powodzeniem" << endl;
+    while (true)
+    {
+        cout << "Podaj sciezke do pliku: \n";
+        getline(cin, path);
+
+        if(readFileTxt(path))
+        {
+            cout << "Ladowanie pliku powiodlo sie. \n";
+            if(openPort(hCommDev, portName, dcb))
+            {
+                if(setCommParametres(hCommDev, commTimeouts, 3000, 3000, 3000, 3000, 3000 ))
+                {
+                    cout << "\nW ilu Bajtach chcesz przesylac pojedynczy blok transmiji? Wielkosc bloku nie moze byc wieksza od predkosci transmisji. \n";
+
+                    cin >> bSize;
+                    blockSize = bSize;
+
+                    sendFileTxt(hCommDev);
+                    break;
+                }   
+            }
+            break;
+        }
+    }
+
+    CloseHandle(hCommDev);
     return 0;
 
 }
