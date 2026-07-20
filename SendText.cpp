@@ -40,7 +40,6 @@ bool openPort(HANDLE &hCommDev, LPCTSTR portName, DCB dcb)
         {
             cout << "GetCommState Error." << "\n";
             return false;
-            CloseHandle(hCommDev);
         }
         
         cout << "\nObecne ustawienia portu to: " << "\n";
@@ -142,7 +141,7 @@ void sendFileTxt(HANDLE &hCommDev)
         writeSerialPort(tempArray , hCommDev, blockSize);
         readSerialPort(hCommDev, blockSize);
 
-        delete tempArray;
+        delete [] tempArray;
     }
 
     if (remainingBytes > 0)
@@ -152,7 +151,7 @@ void sendFileTxt(HANDLE &hCommDev)
         writeSerialPort(tempArray , hCommDev, blockSize);
         readSerialPort(hCommDev, blockSize);
 
-        delete tempArray;
+        delete [] tempArray;
     }
 
 }
