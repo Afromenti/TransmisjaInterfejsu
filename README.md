@@ -6,7 +6,7 @@
 [źródło][1]
 
 <div align="justify">
-Aby poprawnie przetestować działanie tego programu (tzw. test sprzętowej pętli zwrotnej / hardware loopback), użyłem tricku z wysyłaniem danych z portu do samego siebie. Polega to na zwarciu dwóch pinów: **TX (Transmit / Nadawanie)** oraz **RX (Receive / Odbiór)** za pomocą kawałka folii aluminiowej (lub przewodu/zworki). Dzięki temu to, co program wysyła przez nadajnik, jest natychmiastowo odbierane przez odbiornik.
+Aby poprawnie przetestować działanie tego programu (tzw. test sprzętowej pętli zwrotnej / hardware loopback), użyłem tricku z wysyłaniem danych z portu do samego siebie. Polega to na zwarciu dwóch pinów: <strong>TX (Transmit / Nadawanie)</strong> oraz <strong>RX (Receive / Odbiór)</strong> za pomocą kawałka folii aluminiowej (lub przewodu/zworki). Dzięki temu to, co program wysyła przez nadajnik, jest natychmiastowo odbierane przez odbiornik.
 </div>
 
 ### Kompilacja i uruchomienie
