@@ -97,7 +97,7 @@ void readSerialPort(HANDLE hCommDev, unsigned long blockSize)
     ReadFile (hCommDev, bytesRead, blockSize, &numberOfBytesRead, 0);
     print(bytesRead, blockSize);
 
-    delete bytesRead;
+    delete [] bytesRead;
  }
 
  
@@ -168,8 +168,49 @@ int main()
 
     while (true)
     {
-        cout << "Podaj sciezke do pliku: \n";
-        getline(cin, path);
+        cout << "--- MENU GLOWNE ---\n";
+        cout << "1. Podaj wlasna sciezke do pliku\n";
+        cout << "2. Wybierz testowy payload z listy\n";
+        cout << "Wybierz opcje (1-2): ";
+
+        string choice;
+        getline(cin, choice);
+
+        if (choice == "1")
+        {
+            cout << "Podaj sciezke do pliku: \n";
+            getline(cin, path);
+        }
+        else if (choice == "2")
+        {
+            cout << "\n--- LISTA PAYLOADOW ---\n";
+            cout << "1. HelloWorld\n";
+            cout << "2. Dinosaur\n";
+            cout << "Wybierz payload (1-2): ";
+            
+            string payloadChoice;
+            getline(cin, payloadChoice);
+            
+            if (payloadChoice == "1")
+            {
+                path = "Data/Payloads/HelloWorld.txt";
+            }
+            else if (payloadChoice == "2")
+            {
+                path = "Data/Payloads/Dinosaur.txt";
+            }
+            else
+            {
+                cout << "Nieprawidlowy wybor payloada.\n\n";
+                continue;
+            }
+            cout << "Wybrano: " << path << "\n";
+        }
+        else
+        {
+            cout << "Nieprawidlowy wybor, sprobuj ponownie.\n\n";
+            continue;
+        }
 
         if(readFileTxt(path))
         {
