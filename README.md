@@ -43,11 +43,11 @@ W programie zaimplementowano proste menu umożliwiające wczytanie predefiniowan
 
 ## Złożoność obliczeniowa
 
-Złożoność czasowa O programu to zawsze **O(n)**, gdzie *n* stanowi całkowitą liczbę znaków (bajtów) w wybranym pliku tekstowym.
+Złożoność czasowa <strong>O</strong> programu to zawsze **O(n)**, gdzie *n* stanowi całkowitą liczbę znaków (bajtów) w wybranym pliku tekstowym.
 
 **Uzasadnienie:**
 <div align="justify">
-Wszystkie operacje w kodzie są ściśle i liniowo zależne od wielkości pliku. Pętla wejściowa `while` wczytuje po jednym znaku, więc iteruje dokładnie *n* razy. Następnie, mimo dzielenia pliku na mniejsze porcje (podwójna pętla przy wysyłaniu), liczba cykli redukuje się zawsze do objętości pliku. Przykładowo: przy 100 znakach i bloku rozmiaru 5, pętla zewnętrzna obróci się 20 razy, zaś wewnętrzna przekaże i skopiuje każdorazowo 5 znaków (20 * 5 = 100 operacji). Brak w kodzie procedur potęgujących pracę (np. O(n^2)), przez co czas analizy rośnie idealnie proporcjonalnie do objętości wczytanych danych. Prawdziwym "hamulcem" nie jest więc obciążenie procesora, lecz stała szybkość przesyłowa (BaudRate) samego portu COM.
+Wszystkie operacje w kodzie są ściśle i liniowo zależne od wielkości pliku. Pętla wejściowa <strong>while</strong> wczytuje po jednym znaku, więc iteruje dokładnie <strong>n</strong> razy. Następnie, mimo dzielenia pliku na mniejsze porcje (podwójna pętla przy wysyłaniu), liczba cykli redukuje się zawsze do objętości pliku. Przykładowo: przy <strong>100</strong> znakach i bloku rozmiaru <strong>5</strong>, pętla zewnętrzna obróci się <strong>20</strong> razy, zaś wewnętrzna przekaże i skopiuje każdorazowo <strong>5</strong> znaków (<strong>20</strong> * <strong>5</strong> = <strong>100</strong> operacji). Brak w kodzie procedur potęgujących pracę (np. <strong>O(n^2))</strong>, przez co czas analizy rośnie idealnie proporcjonalnie do objętości wczytanych danych. Prawdziwym "hamulcem" nie jest więc obciążenie procesora, lecz stała szybkość przesyłowa <strong>(BaudRate)</strong> samego portu COM.
 </div>
 
 [1]: https://forbot.pl/blog/port-szeregowy-interfejs-usart-czyli-komunikacja-mikrokontrolera-z-komputerem-id1122
