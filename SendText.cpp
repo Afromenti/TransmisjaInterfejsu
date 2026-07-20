@@ -58,7 +58,10 @@ bool openPort(HANDLE &hCommDev, LPCTSTR portName, DCB dcb)
 
 }
 
-bool setCommParametres(HANDLE hCommDev, COMMTIMEOUTS commTimeouts, unsigned long ReadIntervalTimeout, unsigned long ReadTotalTimeoutMultiplier, unsigned long ReadTotalTimeoutConstant, unsigned long WriteTotalTimeoutMultiplier, unsigned long WriteTotalTimeoutConstant)
+bool setCommParametres(HANDLE hCommDev, COMMTIMEOUTS commTimeouts, 
+                      unsigned long ReadIntervalTimeout, unsigned long ReadTotalTimeoutMultiplier, 
+                      unsigned long ReadTotalTimeoutConstant, unsigned long WriteTotalTimeoutMultiplier, 
+                      unsigned long WriteTotalTimeoutConstant)
 {    
     if(GetCommTimeouts (hCommDev, &commTimeouts) == 0)
     {
